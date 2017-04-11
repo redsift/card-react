@@ -85,7 +85,7 @@ CardReactFormContainer = React.createClass
       if typeof child isnt 'object' or child is null
         return child
 
-      if (child.props and child.props.name)
+      if (child.props and child.props.name and child.type is 'input')
 
         newClassName = child.props.className
         inputsValidationClass = @state.inputsValidationClass[child.props.name]
@@ -118,6 +118,7 @@ CardReactFormContainer = React.createClass
     @inputsValues[event.target.name] = event.target.value
     @validateInput event.target.name, event.target.value
     @renderCardComponent()
+    @props.onInputChange && @props.onInputChange(event)
 
   inputOnFocus: (event)->
     @focusedInput = event.target.name
@@ -125,11 +126,13 @@ CardReactFormContainer = React.createClass
     if @focusedInput is @props.formInputsNames['cvc']
       @cardFlipped = true
     @renderCardComponent()
+    @props.onInputFocus && @props.onInputFocus(event)
 
   inputOnBlur: (event)->
     @focusedInput = ''
     @cardFlipped = false
     @renderCardComponent()
+    @props.onInputFocus && @props.onInputBlur(event)
 
   validateInput: (inputName, inputValue)->
     inputsNames = @props.formInputsNames
